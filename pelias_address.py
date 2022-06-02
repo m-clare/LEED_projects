@@ -7,7 +7,7 @@ async def get(session: aiohttp.ClientSession, id: str, address: str, **kwargs) -
     data = await resp.json()
     if data["features"]:
         if len(data["features"]) > 1:
-            return {"id": id, "address": address, "features": len(data["features"])}
+            return {"id": id, "address": address, "features": data["features"]}
         else:
             latitude = data["features"][0]["geometry"]["coordinates"][1]
             longitude = data["features"][0]["geometry"]["coordinates"][0]
@@ -53,5 +53,12 @@ if __name__ == "__main__":
     # test_split(filename)
     results = asyncio.run(main(filename))
     results_filtered = list(filter(lambda x: type(x) == dict, results))
+    multiple_results = []
+    for result in results_filtered:
+        if result['features']:
+            multiple_results.append(result)
+            results_filtered.pop(result)
     with open('pelias_processed_addresses.json', 'w') as fh:
         json.dump(results_filtered, fh, indent=4)
+    with open('pelias_processed_addresses_multi.json', 'w') as fh:
+        json.dump(multiple_results, fh, indent=4)
