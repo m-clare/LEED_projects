@@ -54,11 +54,13 @@ if __name__ == "__main__":
     results = asyncio.run(main(filename))
     results_filtered = list(filter(lambda x: type(x) == dict, results))
     multiple_results = []
+    single_results = []
     for result in results_filtered:
-        if result['features']:
+        if 'features' in result:
             multiple_results.append(result)
-            results_filtered.pop(result)
+        else:
+            single_results.append(result)
     with open('pelias_processed_addresses.json', 'w') as fh:
-        json.dump(results_filtered, fh, indent=4)
+        json.dump(single_results, fh, indent=4)
     with open('pelias_processed_addresses_multi.json', 'w') as fh:
         json.dump(multiple_results, fh, indent=4)
