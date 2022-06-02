@@ -46,7 +46,7 @@ def test_split(filename):
         except IndexError:
             pass
 
-if __name__ == "__msain__":
+if __name__ == "__main__":
     import sys
     import json
     filename = sys.argv[1]
